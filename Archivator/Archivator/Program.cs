@@ -1,14 +1,17 @@
 ﻿using Archivator;
 
-var filePath = @"C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Archivator\test.txt";
-var compressedFilePath = @"C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Archivator\compressed";
-var dictFilePath = @"C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Archivator\dict";
-var decompressedFilePath = @"C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Archivator\decompressed";
+var relPath = "../../../../";
+
+var filePath = @$"{relPath}test.txt";
+var compressedFilePath = @$"{relPath}compressed";
+var decompressedFilePath = @$"{relPath}decompressed";
 
 
+Haffman.Compress(filePath, compressedFilePath);
+Haffman.Decompress(compressedFilePath, decompressedFilePath);
 
 
-Haffman.Compress(filePath, dictFilePath, compressedFilePath);
-Haffman.Decompress(dictFilePath, compressedFilePath, decompressedFilePath);
+var imagePath = @$"{relPath}testImage.jpg";
+var resultImagePath = @$"{relPath}resultImage.jpg";
 
-
+// Jpeg.Compress(imagePath, resultImagePath);
