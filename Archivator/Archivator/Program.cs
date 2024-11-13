@@ -1,4 +1,5 @@
 ﻿using Archivator;
+using Archivator.Jpeg;
 
 var relPath = "../../../../";
 
@@ -7,11 +8,13 @@ var compressedFilePath = @$"{relPath}compressed";
 var decompressedFilePath = @$"{relPath}decompressed";
 
 
-Haffman.Compress(filePath, compressedFilePath);
-Haffman.Decompress(compressedFilePath, decompressedFilePath);
+// Haffman.Compress(filePath, compressedFilePath);
+// Haffman.Decompress(compressedFilePath, decompressedFilePath);
 
 
-var imagePath = @$"{relPath}testImage.jpg";
-var resultImagePath = @$"{relPath}resultImage.jpg";
+var imagePath = @$"{relPath}sample.bmp";
+var imageCompressRes = @$"{relPath}compressedImg";
+var decompressedImagePath = @$"{relPath}decompressed.bmp";
 
-// Jpeg.Compress(imagePath, resultImagePath);
+Jpeg.Compress(imagePath, imageCompressRes);
+Jpeg.Decompress(imageCompressRes, decompressedImagePath);
