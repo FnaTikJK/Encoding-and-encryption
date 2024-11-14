@@ -1,4 +1,4 @@
-﻿namespace Archivator.Jpeg.Infra;
+﻿namespace Archivator.Jpeg.Infra.Ext;
 
 static class IEnumerableExtensions
 {

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Archivator.Jpeg.Infra;
+namespace Archivator.Jpeg.Infra.Image;
 
 public class Matrix
 {

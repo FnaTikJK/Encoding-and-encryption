@@ -1,7 +1,8 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using Archivator.Jpeg.Infra;
-using PixelFormat = Archivator.Jpeg.Infra.PixelFormat;
+using Archivator.Jpeg.Infra.Image;
+using PixelFormat = Archivator.Jpeg.Infra.Image.PixelFormat;
 
 namespace Archivator.Jpeg;
 
@@ -22,7 +23,7 @@ public static class Jpeg
 	public static void Decompress(string compressedImagePath, string uncompressedImagePath)
 	{
 		var compressedImage = CompressedImage.Load(compressedImagePath);
-		var uncompressedImage = Uncompress(compressedImage);
+		var uncompressedImage = Decompress(compressedImage);
 		var resultBmp = (Bitmap)uncompressedImage;
 		resultBmp.Save(uncompressedImagePath, ImageFormat.Bmp);
 	}
@@ -31,11 +32,12 @@ public static class Jpeg
 	{
 		var allQuantizedBytes = new List<byte>();
 
+		var selectors = new Func<Pixel, double>[] {p => p.Y, p => p.Cb, p => p.Cr};
 		for (var y = 0; y < matrix.Height; y += DCTSize)
 		{
 			for (var x = 0; x < matrix.Width; x += DCTSize)
 			{
-				foreach (var selector in new Func<Pixel, double>[] { p => p.Y, p => p.Cb, p => p.Cr })
+				foreach (var selector in selectors)
 				{
 					var subMatrix = GetSubMatrix(matrix, y, DCTSize, x, DCTSize, selector);
 					ShiftMatrixValues(subMatrix, -128);
@@ -47,42 +49,39 @@ public static class Jpeg
 			}
 		}
 
-		long bitsCount;
-		Dictionary<BitsWithLength, byte> decodeTable;
-		var compressedBytes = HuffmanCodec.Encode(allQuantizedBytes, out decodeTable, out bitsCount);
+		var compressedBytes = RLE.Encode(allQuantizedBytes);
 
 		return new CompressedImage
 		{
-			Quality = quality, CompressedBytes = compressedBytes, BitsCount = bitsCount, DecodeTable = decodeTable,
-			Height = matrix.Height, Width = matrix.Width
+			Quality = quality,
+			CompressedBytes = compressedBytes,
+			Height = matrix.Height, 
+			Width = matrix.Width
 		};
 	}
 
-	private static Matrix Uncompress(CompressedImage image)
+	private static Matrix Decompress(CompressedImage image)
 	{
 		var result = new Matrix(image.Height, image.Width);
-		using (var allQuantizedBytes =
-		       new MemoryStream(HuffmanCodec.Decode(image.CompressedBytes, image.DecodeTable, image.BitsCount)))
+		using var allQuantizedBytes = new MemoryStream(RLE.Decode(image.CompressedBytes));
+		for (var y = 0; y < image.Height; y += DCTSize)
 		{
-			for (var y = 0; y < image.Height; y += DCTSize)
+			for (var x = 0; x < image.Width; x += DCTSize)
 			{
-				for (var x = 0; x < image.Width; x += DCTSize)
+				var _y = new double[DCTSize, DCTSize];
+				var cb = new double[DCTSize, DCTSize];
+				var cr = new double[DCTSize, DCTSize];
+				foreach (var channel in new[] { _y, cb, cr })
 				{
-					var _y = new double[DCTSize, DCTSize];
-					var cb = new double[DCTSize, DCTSize];
-					var cr = new double[DCTSize, DCTSize];
-					foreach (var channel in new[] { _y, cb, cr })
-					{
-						var quantizedBytes = new byte[DCTSize * DCTSize];
-						allQuantizedBytes.ReadAsync(quantizedBytes, 0, quantizedBytes.Length).Wait();
-						var quantizedFreqs = ZigZagUnScan(quantizedBytes);
-						var channelFreqs = DeQuantize(quantizedFreqs, image.Quality);
-						DCT.IDCT2D(channelFreqs, channel);
-						ShiftMatrixValues(channel, 128);
-					}
-
-					SetPixels(result, _y, cb, cr, PixelFormat.YCbCr, y, x);
+					var quantizedBytes = new byte[DCTSize * DCTSize];
+					allQuantizedBytes.ReadAsync(quantizedBytes, 0, quantizedBytes.Length).Wait();
+					var quantizedFreqs = ZigZagUnScan(quantizedBytes);
+					var channelFreqs = DeQuantize(quantizedFreqs, image.Quality);
+					DCT.IDCT2D(channelFreqs, channel);
+					ShiftMatrixValues(channel, 128);
 				}
+
+				SetPixels(result, _y, cb, cr, PixelFormat.YCbCr, y, x);
 			}
 		}
 
