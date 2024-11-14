@@ -14,7 +14,8 @@ public static class Jpeg
 	public static void Compress(string imagePath, string compressedImagePath)
 	{
 		using var fileStream = File.OpenRead(imagePath);
-		using var bmp = (Bitmap)Image.FromStream(fileStream, false, false);
+		using var image = Image.FromStream(fileStream, false, false);
+		using var bmp = (Bitmap)image;
 		var imageMatrix = (Matrix)bmp;
 		var compressionResult = Compress(imageMatrix, CompressionQuality);
 		compressionResult.WriteInFile(compressedImagePath);
