@@ -7,7 +7,7 @@ public class CompressedImage
 	public int Quality { get; set; }
 	public byte[] CompressedBytes { get; set; }
 
-	public void Save(string path)
+	public void WriteInFile(string path)
 	{
 		using(var sw = new FileStream(path, FileMode.Create))
 		{
@@ -29,10 +29,10 @@ public class CompressedImage
 		}
 	}
 
-	public static CompressedImage Load(string path)
+	public static CompressedImage FromFile(string filePath)
 	{
 		var result = new CompressedImage();
-		using(var sr = new FileStream(path, FileMode.Open))
+		using(var sr = new FileStream(filePath, FileMode.Open))
 		{
 			byte[] buffer = new byte[8];
 

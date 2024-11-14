@@ -17,12 +17,12 @@ public static class Jpeg
 		using var bmp = (Bitmap)Image.FromStream(fileStream, false, false);
 		var imageMatrix = (Matrix)bmp;
 		var compressionResult = Compress(imageMatrix, CompressionQuality);
-		compressionResult.Save(compressedImagePath);
+		compressionResult.WriteInFile(compressedImagePath);
 	}
 
 	public static void Decompress(string compressedImagePath, string uncompressedImagePath)
 	{
-		var compressedImage = CompressedImage.Load(compressedImagePath);
+		var compressedImage = CompressedImage.FromFile(compressedImagePath);
 		var uncompressedImage = Decompress(compressedImage);
 		var resultBmp = (Bitmap)uncompressedImage;
 		resultBmp.Save(uncompressedImagePath, ImageFormat.Bmp);
