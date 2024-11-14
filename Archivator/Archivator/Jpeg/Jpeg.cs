@@ -63,25 +63,28 @@ public static class Jpeg
 	private static Matrix Decompress(CompressedImage image)
 	{
 		var result = new Matrix(image.Height, image.Width);
+		var channels = new[]
+		{
+			new double[DCTSize, DCTSize], // Y
+			new double[DCTSize, DCTSize], // Cb
+			new double[DCTSize, DCTSize], // Cr
+		};
+		var buffer = new byte[DCTSize * DCTSize];
 		using var allQuantizedBytes = new MemoryStream(RLE.Decode(image.CompressedBytes));
 		for (var y = 0; y < image.Height; y += DCTSize)
 		{
 			for (var x = 0; x < image.Width; x += DCTSize)
 			{
-				var _y = new double[DCTSize, DCTSize];
-				var cb = new double[DCTSize, DCTSize];
-				var cr = new double[DCTSize, DCTSize];
-				foreach (var channel in new[] { _y, cb, cr })
+				foreach (var channel in channels)
 				{
-					var quantizedBytes = new byte[DCTSize * DCTSize];
-					allQuantizedBytes.ReadAsync(quantizedBytes, 0, quantizedBytes.Length).Wait();
-					var quantizedFreqs = ZigZagUnScan(quantizedBytes);
+					allQuantizedBytes.ReadAsync(buffer, 0, buffer.Length).Wait();
+					var quantizedFreqs = ZigZagUnScan(buffer);
 					var channelFreqs = Quantizer.DeQuantize(quantizedFreqs, image.Quality);
 					DCT.IDCT2D(channelFreqs, channel);
 					ShiftMatrixValues(channel, 128);
 				}
 
-				SetPixels(result, _y, cb, cr, PixelFormat.YCbCr, y, x);
+				SetPixels(result, channels[0], channels[1], channels[2], PixelFormat.YCbCr, y, x);
 			}
 		}
 
