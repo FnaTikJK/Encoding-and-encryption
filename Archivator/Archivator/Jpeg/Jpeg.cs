@@ -42,7 +42,7 @@ public static class Jpeg
 					var subMatrix = GetSubMatrix(matrix, y, DCTSize, x, DCTSize, selector);
 					ShiftMatrixValues(subMatrix, -128);
 					var channelFreqs = DCT.DCT2D(subMatrix);
-					var quantizedFreqs = Quantize(channelFreqs, quality);
+					var quantizedFreqs = Quantizer.Quantize(channelFreqs, quality);
 					var quantizedBytes = ZigZagScan(quantizedFreqs);
 					allQuantizedBytes.AddRange(quantizedBytes);
 				}
@@ -76,7 +76,7 @@ public static class Jpeg
 					var quantizedBytes = new byte[DCTSize * DCTSize];
 					allQuantizedBytes.ReadAsync(quantizedBytes, 0, quantizedBytes.Length).Wait();
 					var quantizedFreqs = ZigZagUnScan(quantizedBytes);
-					var channelFreqs = DeQuantize(quantizedFreqs, image.Quality);
+					var channelFreqs = Quantizer.DeQuantize(quantizedFreqs, image.Quality);
 					DCT.IDCT2D(channelFreqs, channel);
 					ShiftMatrixValues(channel, 128);
 				}
@@ -179,69 +179,5 @@ public static class Jpeg
 				quantizedBytes[58], quantizedBytes[62], quantizedBytes[63]
 			}
 		};
-	}
-
-	private static byte[,] Quantize(double[,] channelFreqs, int quality)
-	{
-		var result = new byte[channelFreqs.GetLength(0), channelFreqs.GetLength(1)];
-
-		var quantizationMatrix = GetQuantizationMatrix(quality);
-		for (int y = 0; y < channelFreqs.GetLength(0); y++)
-		{
-			for (int x = 0; x < channelFreqs.GetLength(1); x++)
-			{
-				result[y, x] = (byte)(channelFreqs[y, x] / quantizationMatrix[y, x]);
-			}
-		}
-
-		return result;
-	}
-
-	private static double[,] DeQuantize(byte[,] quantizedBytes, int quality)
-	{
-		var result = new double[quantizedBytes.GetLength(0), quantizedBytes.GetLength(1)];
-		var quantizationMatrix = GetQuantizationMatrix(quality);
-
-		for (int y = 0; y < quantizedBytes.GetLength(0); y++)
-		{
-			for (int x = 0; x < quantizedBytes.GetLength(1); x++)
-			{
-				result[y, x] =
-					((sbyte)quantizedBytes[y, x]) *
-					quantizationMatrix[y, x]; //NOTE cast to sbyte not to loose negative numbers
-			}
-		}
-
-		return result;
-	}
-
-	private static int[,] GetQuantizationMatrix(int quality)
-	{
-		if (quality < 1 || quality > 99)
-			throw new ArgumentException("quality must be in [1,99] interval");
-
-		var multiplier = quality < 50 ? 5000 / quality : 200 - 2 * quality;
-
-		var result = new[,]
-		{
-			{ 16, 11, 10, 16, 24, 40, 51, 61 },
-			{ 12, 12, 14, 19, 26, 58, 60, 55 },
-			{ 14, 13, 16, 24, 40, 57, 69, 56 },
-			{ 14, 17, 22, 29, 51, 87, 80, 62 },
-			{ 18, 22, 37, 56, 68, 109, 103, 77 },
-			{ 24, 35, 55, 64, 81, 104, 113, 92 },
-			{ 49, 64, 78, 87, 103, 121, 120, 101 },
-			{ 72, 92, 95, 98, 112, 100, 103, 99 }
-		};
-
-		for (int y = 0; y < result.GetLength(0); y++)
-		{
-			for (int x = 0; x < result.GetLength(1); x++)
-			{
-				result[y, x] = (multiplier * result[y, x] + 50) / 100;
-			}
-		}
-
-		return result;
 	}
 }

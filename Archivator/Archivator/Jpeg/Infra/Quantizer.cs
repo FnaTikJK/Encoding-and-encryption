@@ -3,11 +3,11 @@
 public static class Quantizer
 {
 
-    public static byte[,] Quantize(double[,] channelFreqs)
+    public static byte[,] Quantize(double[,] channelFreqs, int quality)
     {
-        if (!isSetted)
-            throw new Exception("Quantize matrix did not set");
-        
+        if (settedQuality != quality)
+            SetQuality(quality);
+
         var result = new byte[channelFreqs.GetLength(0), channelFreqs.GetLength(1)];
         for (var y = 0; y < channelFreqs.GetLength(0); y++)
         {
@@ -19,23 +19,44 @@ public static class Quantizer
 
         return result;
     }
+    
+    public static double[,] DeQuantize(byte[,] quantizedBytes, int quality)
+    {
+        if (settedQuality != quality)
+            SetQuality(quality);
+        
+        var result = new double[quantizedBytes.GetLength(0), quantizedBytes.GetLength(1)];
+        for (int y = 0; y < quantizedBytes.GetLength(0); y++)
+        {
+            for (int x = 0; x < quantizedBytes.GetLength(1); x++)
+            {
+                result[y, x] =
+                    ((sbyte)quantizedBytes[y, x]) *
+                    workingMatrix[y, x]; //NOTE cast to sbyte not to loose negative numbers
+            }
+        }
+
+        return result;
+    }
 
 
-    public static void SetQuality(int quality)
+    private static void SetQuality(int quality)
     {
         if (quality < 1 || quality > 99)
             throw new ArgumentException("quality must be in [1,99] interval");
 
-        var multiplier = quality < 50 ? 5000 / quality : 200 - 2 * quality;
-        for (int y = 0; y < workingMatrix.GetLength(0); y++)
+        var multiplier = quality < 50 
+            ? 5000 / quality 
+            : 200 - 2 * quality;
+        for (var y = 0; y < workingMatrix.GetLength(0); y++)
         {
-            for (int x = 0; x < workingMatrix.GetLength(1); x++)
+            for (var x = 0; x < workingMatrix.GetLength(1); x++)
             {
-                workingMatrix[y, x] = (multiplier * workingMatrix[y, x] + 50) / 100;
+                workingMatrix[y, x] = (multiplier * DefaultMatrix[y, x] + 50) / 100;
             }
         }
 
-        isSetted = true;
+        settedQuality = quality;
     }
     
     
@@ -50,6 +71,6 @@ public static class Quantizer
         { 72, 92, 95, 98, 112, 100, 103, 99 }
     };
 
-    private static bool isSetted = false;
+    private static int settedQuality = 0;
     private static int[,] workingMatrix = new int[DefaultMatrix.GetLength(0), DefaultMatrix.GetLength(1)];
 }
