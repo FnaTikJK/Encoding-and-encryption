@@ -1,8 +1,8 @@
 using System.Text;
 
-namespace Archivator;
+namespace Archivator.Huffman;
 
-public class HaffmanCompressed
+public class HuffmanCompressed
 {
     public Dictionary<char, string> DecodeTable { get; set; }
     public byte[] Encoded { get; set; }
@@ -22,9 +22,9 @@ public class HaffmanCompressed
         stream.Write(Encoded);
     }
 
-    public static HaffmanCompressed FromFile(string filePath, Encoding encoding)
+    public static HuffmanCompressed FromFile(string filePath, Encoding encoding)
     {
-        var haffman = new HaffmanCompressed
+        var haffman = new HuffmanCompressed
         {
             DecodeTable = new Dictionary<char, string>(),
         };

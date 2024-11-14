@@ -1,14 +1,14 @@
 ﻿using System.Text;
 
-namespace Archivator;
+namespace Archivator.Huffman;
 
-public static class Haffman
+public static class Huffman
 {
     private static readonly Encoding Encoding = Encoding.Default;
     
     public static void Decompress(string compressedFilePath, string resultFilePath)
     {
-        var haffmanCompressed = HaffmanCompressed.FromFile(compressedFilePath, Encoding);
+        var haffmanCompressed = HuffmanCompressed.FromFile(compressedFilePath, Encoding);
         var dict = haffmanCompressed.DecodeTable
             .ToDictionary(e => e.Value, e => e.Key);
         var bytes = haffmanCompressed.Encoded
@@ -57,7 +57,7 @@ public static class Haffman
             .Select(e => Convert.ToByte(e, 2))
             .ToArray();
 
-        var haffmanCompressed = new HaffmanCompressed
+        var haffmanCompressed = new HuffmanCompressed
         {
             DecodeTable = codesByCh,
             Encoded = bytes,
