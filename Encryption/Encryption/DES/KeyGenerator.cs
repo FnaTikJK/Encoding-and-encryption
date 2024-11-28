@@ -6,6 +6,9 @@ public static class KeyGenerator
 
     public static void Generate(byte[] initKey)
     {
+        if (initKey.Length < 7)
+            throw new Exception("Размер ключа должен быть минимум 7 байт (56 бит)");
+
         var keyBits = initKey.Take(7).ToBoolArray();
         var extendedTo64Bits = ExtendKey(keyBits);
         for (var i = 0; i < 16; i++)
