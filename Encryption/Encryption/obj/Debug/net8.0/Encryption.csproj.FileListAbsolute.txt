@@ -1,0 +1,15 @@
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\bin\Debug\net8.0\Encryption.exe
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\bin\Debug\net8.0\Encryption.deps.json
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\bin\Debug\net8.0\Encryption.runtimeconfig.json
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\bin\Debug\net8.0\Encryption.dll
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\bin\Debug\net8.0\Encryption.pdb
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\Encryption.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\Encryption.AssemblyInfoInputs.cache
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\Encryption.AssemblyInfo.cs
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\Encryption.csproj.CoreCompileInputs.cache
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\Encryption.sourcelink.json
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\Encryption.dll
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\refint\Encryption.dll
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\Encryption.pdb
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\Encryption.genruntimeconfig.cache
+C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Encryption\Encryption\obj\Debug\net8.0\ref\Encryption.dll
