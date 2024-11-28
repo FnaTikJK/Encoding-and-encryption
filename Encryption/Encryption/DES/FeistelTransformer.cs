@@ -37,7 +37,7 @@ public static class FeistelTransformer
     private static bool[] FeistelFunc(bool[] key, bool[] halfBits)
     {
         var expanded = halfBits.ShuffleWithResize(ExpandTo48BitsTable);
-        expanded.Xor(key);
+        expanded = expanded.Xor(key);
 
         var sTransformed = expanded
             .Chunk(6)
