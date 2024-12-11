@@ -8,5 +8,5 @@ var text = "фыв"; // 5 version "Это прсосто какой-то ран�
 // text = string.Join("", Enumerable.Repeat(text, 3)); // 11 version
 var data = Encoding.Default.GetBytes(text);
 var correction = Correction.L;
-var image = Coder.Encode(data, correction);
+var image = Qr_Coder.QrCoder.Encode(data, correction);
 image.Save(@"C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Qr-Coder\image.png", ImageFormat.Png);

@@ -14,7 +14,7 @@ public static class Extensions
         }).ToArray();
     }
 
-    public static bool[] ToBoolArray(this byte[] bytes)
+    public static bool[] ToBoolArray(this IEnumerable<byte> bytes)
     {
         return bytes
             .SelectMany(e => Convert.ToString(e, 2).PadLeft(8, '0').ToBoolArray())

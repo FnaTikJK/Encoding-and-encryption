@@ -4,9 +4,8 @@ namespace Qr_Coder;
 
 public static class DataDrawer
 {
-    public static void Draw(Bitmap image, int qrSize, byte[] data)
+    public static void Draw(Bitmap image, int qrSize, bool[] bits)
     {
-        var bits = data.ToBoolArray();
         var ind = 0;
         foreach (var position in GetPositions(qrSize))
         {
