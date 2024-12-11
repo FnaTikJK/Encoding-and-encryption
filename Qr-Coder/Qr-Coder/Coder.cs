@@ -1,8 +1,10 @@
-﻿namespace Qr_Coder;
+﻿using System.Drawing;
+
+namespace Qr_Coder;
 
 public static class Coder
 {
-    public static void Encode(byte[] data, Correction correction)
+    public static Bitmap Encode(byte[] data, Correction correction)
     {
         var version = GetVersion(data, correction);
         var workingFields = GetWorkingFields(data, version);
@@ -21,6 +23,9 @@ public static class Coder
             .Concat(correctionBlocks.ByInternalIndexesOrder())
             .ToArray();
 
+        var image = Drawer.Draw(unifiedBlocks, version, correction);
+
+        return image;
     }
 
     private static bool[] FillToVersionSize(bool[] toEncode, int version, Correction correction)

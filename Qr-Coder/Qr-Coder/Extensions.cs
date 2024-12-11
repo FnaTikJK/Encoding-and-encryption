@@ -75,27 +75,66 @@ public static class Extensions
 
     public static void SetRectangle(this Bitmap image, int x, int y, int borderSize, Color color)
     {
-        var delta = borderSize / 2;
-        for (var i = x - delta; i <= x + delta; i++)
+        x = x * Drawer.PixelSizeModule + Drawer.BorderSize;
+        y = y * Drawer.PixelSizeModule + Drawer.BorderSize;
+        
+        var borderSizeInPixels = borderSize * Drawer.PixelSizeModule - 1;
+        var deltaWidth = Drawer.PixelSizeModule;
+        for (var i = x; i <= x + borderSizeInPixels; i++)
         {
-            image.SetPixel(i, y - delta, color);
-            image.SetPixel(i, y + delta, color);
+            for (var width = 0; width < deltaWidth; width++)
+            {
+                image.SetPixel(i, y + width, color);
+                image.SetPixel(i, y + borderSizeInPixels - width, color);
+            }
         }
-        for (var i = y - delta; i <= y + delta; i++)
+        for (var i = y; i <= y + borderSizeInPixels; i++)
         {
-            image.SetPixel(x - delta, i, color);
-            image.SetPixel(x + delta, i, color);
+            for (var width = 0; width < deltaWidth; width++)
+            {
+                image.SetPixel(x + width, i, color);
+                image.SetPixel(x + borderSizeInPixels - width, i, color);
+            }
         }
     }
 
     public static void SetFilledRectangle(this Bitmap image, int x, int y, int borderSize, Color color)
     {
-        var delta = borderSize / 2;
-        for (var i = x - delta; i <= x + delta; i++)
+        x = x * Drawer.PixelSizeModule + Drawer.BorderSize;
+        y = y * Drawer.PixelSizeModule + Drawer.BorderSize;
+
+        var borderSizeInPixels = borderSize * Drawer.PixelSizeModule;
+        for (var i = x; i < x + borderSizeInPixels; i++)
         {
-            for (var j = y - delta; j <= y + delta; j++)
+            for (var j = y; j < y + borderSizeInPixels; j++)
             {
                 image.SetPixel(i, j, color);
+            }
+        }
+    }
+
+    public static void Fill(this Bitmap image, Color color)
+    {
+        for (var i = 0; i < image.Width; i++)
+        for (var j = 0; j < image.Height; j++)
+            image.SetPixel(i, j, color);
+    }
+
+    public static void SetLine(this Bitmap image, int xStart, int yStart, int xEnd, int yEnd, bool[] values, bool isRepeatable = false)
+    {
+        var ind = 0;
+        for (var i = xStart; i <= xEnd; i++)
+        {
+            for (var j = yStart; j <= yEnd; j++)
+            {
+                if (values[ind])
+                {
+                    image.SetFilledRectangle(i, j, 1, Color.Black);
+                }
+
+                ind = isRepeatable
+                    ? (ind + 1) % values.Length
+                    : ind + 1;
             }
         }
     }
