@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "/D0yKo82ajud1f7XKGRbWAHw2/pYuYokQWv2ISbZgl9hrYSUiYxmzaAPkqXX+EeVwLs9QFJ/q+tIHejgoxrHWw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Антон\\source\\repos\\c#\\Encoding-and-encryption\\Qr-Coder\\Qr-Coder\\Qr-Coder.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Антон\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.0\\microsoft.win32.systemevents.9.0.0.nupkg.sha512",
+    "C:\\Users\\Антон\\.nuget\\packages\\qrcoder\\1.6.0\\qrcoder.1.6.0.nupkg.sha512",
+    "C:\\Users\\Антон\\.nuget\\packages\\system.drawing.common\\9.0.0\\system.drawing.common.9.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
