@@ -4,9 +4,8 @@ namespace Qr_Coder;
 
 public static class MaskCodeDrawer
 {
-    public static void Draw(Bitmap image, int qrSize, Correction correction)
+    public static void Draw(Bitmap image, int qrSize, Correction correction, int maskNumber)
     {
-        var maskNumber = 1;
         var maskCode = MaskCodesPerCorrection[correction][maskNumber];
         
         image.SetLine(0, 8, 5, 8, maskCode.Substring(0, 6).ToBoolArray());

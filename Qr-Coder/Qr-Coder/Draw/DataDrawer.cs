@@ -4,14 +4,14 @@ namespace Qr_Coder;
 
 public static class DataDrawer
 {
-    public static void Draw(Bitmap image, int qrSize, bool[] bits)
+    public static void Draw(Bitmap image, int qrSize, bool[] bits, int maskNumber)
     {
         levelingPositions = LevelingPatternDrawer.GetPositions(qrSize).ToArray();
         var ind = 0;
         foreach (var position in GetPositions(qrSize))
         {
             var value = ind < bits.Length ? bits[ind++] : false;
-            if (Masked(value, position.y))
+            if (Masked(value, position.x, position.y, maskNumber))
                 image.SetFilledRectangle(position.x, position.y, 1, Color.Black);
 
         }
@@ -20,12 +20,19 @@ public static class DataDrawer
             Console.WriteLine("Not all data was written in QR!");
     }
 
-    private static bool Masked(bool value, int y)
+    private static bool Masked(bool value, int x, int y, int maskNumber)
     {
-        if (y % 2 == 0)
+        if (masks[maskNumber](x, y))
             return !value;
         return value;
     }
+
+    private static Func<int, int, bool>[] masks = {
+        (x, y) => (x+y) % 2 == 0,
+        (x, y) => y % 2 == 0,
+        (x, y) => x % 3 == 0,
+        (x, y) => (x + y) % 3 == 0,
+    };
 
     private static IEnumerable<(int x, int y)> GetPositions(int qrSize)
     {

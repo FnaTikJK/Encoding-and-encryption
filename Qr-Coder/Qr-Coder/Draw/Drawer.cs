@@ -9,7 +9,7 @@ public static class Drawer
     public static int PixelSizeModule;
     public static int BorderSize => BorderModules * PixelSizeModule;
 
-    public static Bitmap Draw(bool[] bits, int version, Correction correction)
+    public static Bitmap Draw(bool[] bits, int version, Correction correction, int maskNumber)
     {
         var qrSize = LevelingPatternDrawer.GetQrSize(version);
         
@@ -26,9 +26,9 @@ public static class Drawer
         SearchingPatternDrawer.Draw(image, qrSize);
         SyncLinesDrawer.Draw(image, qrSize); 
         VersionCodeDrawer.Draw(image, version, qrSize);
-        MaskCodeDrawer.Draw(image, qrSize, correction);
+        MaskCodeDrawer.Draw(image, qrSize, correction, maskNumber);
         LevelingPatternDrawer.Draw(image, qrSize);
-        DataDrawer.Draw(image, qrSize, bits);
+        DataDrawer.Draw(image, qrSize, bits, maskNumber);
 
         return image;
     }
