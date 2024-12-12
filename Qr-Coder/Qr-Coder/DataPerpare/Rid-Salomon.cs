@@ -1,6 +1,6 @@
 ﻿namespace Qr_Coder;
 
-public static class Rid_Salomon
+public static class ReedSalomon
 {
     public static byte[] GetCorrectionBlock(byte[] block, Correction correction, int version)
     {

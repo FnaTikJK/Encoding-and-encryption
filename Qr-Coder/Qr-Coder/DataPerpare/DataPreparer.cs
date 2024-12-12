@@ -15,7 +15,7 @@ public static class DataPreparer
         var filled = FillToVersionSize(toEncode, version, correction).ToByteArray();
         var blocks = BlockSplitter.Split(filled, correction, version);
         var correctionBlocks = blocks
-            .Select(block => Rid_Salomon.GetCorrectionBlock(block, correction, version))
+            .Select(block => ReedSalomon.GetCorrectionBlock(block, correction, version))
             .ToArray();
         var bits = blocks.ByInternalIndexesOrder()
             .Concat(correctionBlocks.ByInternalIndexesOrder())

@@ -11,7 +11,7 @@ public static class DataPreparerV2
         var prettied = DataPrettier.Pretty(encoded, workingFields, needsBitsLength);
         var blocks = BlockSplitter.Split(prettied.ToByteArray(), correction, version);
         var correctionBlocks = blocks
-            .Select(e => Rid_Salomon.GetCorrectionBlock(e, correction, version))
+            .Select(e => ReedSalomon.GetCorrectionBlock(e, correction, version))
             .ToArray();
         var resultBits =blocks.ByInternalIndexesOrder()
             .Concat(correctionBlocks.ByInternalIndexesOrder())
