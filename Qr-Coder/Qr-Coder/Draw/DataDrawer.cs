@@ -6,14 +6,18 @@ public static class DataDrawer
 {
     public static void Draw(Bitmap image, int qrSize, bool[] bits)
     {
+        levelingPositions = LevelingPatternDrawer.GetPositions(qrSize).ToArray();
         var ind = 0;
         foreach (var position in GetPositions(qrSize))
         {
-            if (Masked(bits[ind], position.y))
+            var value = ind < bits.Length ? bits[ind++] : false;
+            if (Masked(value, position.y))
                 image.SetFilledRectangle(position.x, position.y, 1, Color.Black);
 
-            ind++;
         }
+
+        if (ind != bits.Length)
+            Console.WriteLine("Not all data was written in QR!");
     }
 
     private static bool Masked(bool value, int y)
@@ -75,9 +79,15 @@ public static class DataDrawer
 
     private static bool ShouldSkip(int x, int y, int qrSize, out bool withMoveLeft)
     {
+        var isInsideLevelingPattern = levelingPositions.Any(position => position.x - 2 <= x && position.x + 2 >= x
+            && position.y - 2 <= y && position.y + 2 >= y);
+        
         withMoveLeft = x == 6;
 
         return x == 6 || y == 6 // sync lines
-            || x < 9 && y > qrSize - 8;
+                      || x < 9 && y > qrSize - 8
+                      || isInsideLevelingPattern;
     }
+
+    private static (int x, int y)[] levelingPositions;
 }

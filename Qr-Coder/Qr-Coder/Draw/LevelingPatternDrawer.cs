@@ -18,9 +18,19 @@ public static class LevelingPatternDrawer
 
     public static void Draw(Bitmap image, int qrSize)
     {
-        if (levelingPositions == null)
-            return;
+        foreach (var position in GetPositions(qrSize))
+        {
+            image.SetFilledRectangle(position.x, position.y, 1, Color.Black);
+            image.SetRectangle(position.x - 1, position.y - 1, 3, Color.White);
+            image.SetRectangle(position.x - 2, position.y - 2, 5, Color.Black);
+        }
+    }
 
+    public static IEnumerable<(int x, int y)> GetPositions(int qrSize)
+    {
+        if (levelingPositions == null)
+            yield break;
+        
         foreach (var xPosition in levelingPositions)
         {
             foreach (var yPosition in levelingPositions)
@@ -28,9 +38,7 @@ public static class LevelingPatternDrawer
                 if (NeedSkipLevel(xPosition, yPosition, qrSize))
                     continue;
 
-                image.SetFilledRectangle(xPosition, yPosition, 1, Color.Black);
-                image.SetRectangle(xPosition - 1, yPosition - 1, 3, Color.White);
-                image.SetRectangle(xPosition - 2, yPosition - 2, 5, Color.Black);
+                yield return (xPosition, yPosition);
             }
         }
     }

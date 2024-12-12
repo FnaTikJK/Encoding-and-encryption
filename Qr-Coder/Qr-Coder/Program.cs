@@ -1,10 +1,19 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using System.Drawing.Imaging;
-using System.Text;
+﻿using System.Drawing.Imaging;
 using Qr_Coder;
 
-var text = "NIGGERS";
-var correction = Correction.M;
-var image = Qr_Coder.QrCoder.Encode(text, correction);
-image.Save(@"C:\Users\Антон\source\repos\c#\Encoding-and-encryption\Qr-Coder\image.png", ImageFormat.Png);
+
+try
+{
+    Console.WriteLine("Input command like: L/M/Q/H {text}");
+    var command = Console.ReadLine()!.Split();
+    var correction = Enum.Parse<Correction>(command[0].ToUpper());
+    var text = string.Join(" ", command[1..]);
+    var image = QrCoder.Encode(text, correction);
+    image.Save($"{text}.png", ImageFormat.Png);
+    Console.WriteLine("Success!");
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.Message);
+}
+Console.ReadKey();

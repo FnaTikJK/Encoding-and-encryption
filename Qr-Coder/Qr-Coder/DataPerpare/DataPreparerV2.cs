@@ -6,6 +6,7 @@ public static class DataPreparerV2
     {
         var encoded = AlphanumericEncoder.Encode(text);
         var (version, needsBitsLength) = VersionDeterminer.Determine(encoded.Length, correction);
+        Console.WriteLine($"Version is: {version}. Bits length: {encoded.Length}, max in version: {needsBitsLength}");
         var workingFields = WorkingFieldsDeterminer.GetWorkingFields(text.Length, version);
         var prettied = DataPrettier.Pretty(encoded, workingFields, needsBitsLength);
         var blocks = BlockSplitter.Split(prettied.ToByteArray(), correction, version);

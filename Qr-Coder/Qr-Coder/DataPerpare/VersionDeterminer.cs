@@ -7,7 +7,7 @@ public static class VersionDeterminer
         var versions = BitsPerVersionAndCorrection[correction];
         for (int i = 0; i < versions.Length; i++)
         {
-            if (versions[i] > bitsCount + 14) // 14 - усредненная длинна WorkingFields
+            if (versions[i] > bitsCount) // 14 - усредненная длинна WorkingFields
                 return (i + 1, versions[i]);
         }
 
