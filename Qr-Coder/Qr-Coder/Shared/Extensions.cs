@@ -4,6 +4,16 @@ namespace Qr_Coder;
 
 public static class Extensions
 {
+    public static string ToStr(this bool[] arr)
+    {
+        return string.Join(" ", arr.Chunk(8).Select(e => string.Join("", e.Select(b => b ? '1' : '0'))));
+    }
+    
+    public static bool[] ToBoolArray(this int number, int length)
+    {
+        return Convert.ToString(number, 2).PadLeft(length, '0').ToBoolArray();
+    }
+    
     public static bool[] ToBoolArray(this string str)
     {
         return str.Select(e =>

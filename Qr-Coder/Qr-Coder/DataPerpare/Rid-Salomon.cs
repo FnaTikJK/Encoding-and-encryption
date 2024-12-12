@@ -23,7 +23,7 @@ public static class Rid_Salomon
             }
         }
 
-        return result;
+        return result[..generationPolinomial.Length];
     }
 
     private static byte[] GaluaField =

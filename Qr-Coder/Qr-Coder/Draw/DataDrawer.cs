@@ -9,14 +9,18 @@ public static class DataDrawer
         var ind = 0;
         foreach (var position in GetPositions(qrSize))
         {
-            if (bits[ind])
+            if (Masked(bits[ind], position.y))
                 image.SetFilledRectangle(position.x, position.y, 1, Color.Black);
 
             ind++;
         }
+    }
 
-        // if (ind != bits.Length - 1)
-        //     throw new Exception("Incorrect DataDrawing");
+    private static bool Masked(bool value, int y)
+    {
+        if (y % 2 == 0)
+            return !value;
+        return value;
     }
 
     private static IEnumerable<(int x, int y)> GetPositions(int qrSize)

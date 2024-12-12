@@ -42,7 +42,7 @@ public static class DataPreparer
         return (encodingTypeField + dataCountField).ToBoolArray();
     }
 
-    private static int GetVersion(byte[] data, Correction correction)
+    public static int GetVersion(byte[] data, Correction correction)
     {
         var bitsCount = data.Length * 8;
         var versions = BitsPerVersionAndCorrection[correction];
